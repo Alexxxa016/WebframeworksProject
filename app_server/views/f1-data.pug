@@ -1,0 +1,23 @@
+extends layout
+
+include _includes/sharedHTMLfunctions
+
+block content
+  doctype html
+  html
+    head
+      title Drivers Page
+    body
+      .container
+        h1.text-center Formula One Drivers 2023
+        hr
+        .row
+          each driver in drivers
+            .col-md-4
+              .card
+                .card-body
+                  h5.card-title Driver: #{driver.Driver}
+                  p.card-text Number: #{driver.Number}
+                  p.card-text Points: #{driver.Points}
+                  p.card-text Country: #{driver.Country}
+                  p.card-text Team: #{driver.Team}
