@@ -10,4 +10,9 @@ router.get('/register', ctrlPages.registerPage);
 /* Other pages */
 router.get('/login', ctrlOthers.login);
 
+router.post('/loginSubmit', ctrlOthers.logInData);
+
+
+router.post('/userRegistration', ctrlOthers.userRegistrationInfo);
+
 module.exports = router;

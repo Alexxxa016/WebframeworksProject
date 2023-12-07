@@ -15,7 +15,7 @@ block content
               h1.title Login
               hr
           .main-login.main-center
-            form.form-horizontal(method='post', action='#')
+            form.form-horizontal(method='post', action="/loginSubmit", role='form')
               .form-group
                 label.cols-sm-2.control-label(for='username') Username
                 .cols-sm-10
@@ -31,6 +31,6 @@ block content
                       i.fa.fa-lock.fa-lg(aria-hidden='true')
                     input#password.form-control(type='password', name='password', placeholder='Enter your Password')
               .form-group
-                button.btn.btn-primary.btn-lg.btn-block.login-button(type='button') Register
+                button.btn.btn-primary.btn-lg.btn-block.login-button(type='submit') Register
               .login-register
                 a(href='index.php') Login

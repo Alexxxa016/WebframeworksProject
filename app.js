@@ -1,4 +1,4 @@
-require('./app_server/models/db');
+require('./app_api/models/db');
 const express = require('express');
 const path = require('path');
 const favicon = require('serve-favicon');
@@ -7,9 +7,23 @@ const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 
 const index = require('./app_server/routes/index');
-const users = require('./app_server/routes/users');
+const apiRoutes = require('./app_api/routes/index');
 
+
+
+
+
+var fs = require('fs');
+var http = require('http');
+var https = require('https');
+var privateKey = fs.readFileSync('./sslcert/key.pem', 'utf8');
+var certificate = fs.readFileSync('./sslcert/cert.pem', 'utf8');
+var credentials = {key: privateKey, cert: certificate};
 const app = express();
+var httpServer = http.createServer(app);
+var httpsServer = https.createServer(credentials, app);
+httpServer.listen(8000);
+httpsServer.listen(443);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'app_server', 'views'));
@@ -22,16 +36,23 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'app_public')));
 
-app.use('/', index);
-app.use('/users', users);
+app.use('/',index);
+app.use('/api', apiRoutes);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   const err = new Error('Not Found');
   err.status = 404;
+
+  console.log('Request URL:', req.originalUrl);
+
   next(err);
 });
+
+
+
 
 // error handler
 app.use(function(err, req, res, next) {

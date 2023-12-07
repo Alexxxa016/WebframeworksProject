@@ -1,5 +1,16 @@
 /* GET 'home' page */
-const f1data = function(req, res){
+const request = require('request');
+const apiOptions = {
+server : 'http://localhost:3000'
+};
+if (process.env.NODE_ENV === 'production') {
+apiOptions.server = 'https://helloexpressalex.onrender.com';
+}
+
+
+
+
+const _renderHomepage = function(req, res, responseBody){
   res.render('f1-data', {
     title: 'Formula 1 Stats',
     pageHeader: {
@@ -7,27 +18,31 @@ const f1data = function(req, res){
       strapline: 'Drivers of 2023!'
     },
     sidebar: "Check out the top drivers and their points on the leader board!!",
-    drivers: [{
-        Driver: 'Lewis Hamiltion',
-        Number: 44,
-        Points: 201,
-        Country: 'England',
-        Team: 'Mercedes'
-    }, {
-        Driver: 'Max Verstappen',
-        Number: 1,
-        Points: 466,
-        Country: 'Netherland',
-        Team: 'Redbull'
-    }, {
-        Driver: 'Charles Leclerc',
-        Number: 16,
-        Points: 151,
-        Country: 'Monaco',
-        Team: 'Ferrari'
-    }]
+    drivers: responseBody.drivers  
   });
 };
+
+
+
+const f1data = function(req, res){
+const path = '/api/locations';
+const requestOptions = {
+url : apiOptions.server + path,
+method : 'GET',
+json : {},
+qs : {
+lng : -0.9690884,
+lat : 51.455041,
+maxDistance : 20
+}
+};
+request(requestOptions, (err, response, body) => {
+_renderHomepage(req, res, body);
+}
+);
+};
+
+
 
 /* GET 'Register' page */
 const registerPage = function(req, res){
@@ -38,6 +53,8 @@ const registerPage = function(req, res){
     }
   });
 };
+
+
 
 
 module.exports = {
